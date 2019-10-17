@@ -117,6 +117,3 @@ elif morn_eve_both == 'B':
 else: 
 	print('Sorry, I didn\'t understand that. Type M for morning prompts, E for evening, or B for both!')
 		# need to get the loop to repeat here
-
-
-	
