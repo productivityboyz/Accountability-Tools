@@ -2,28 +2,27 @@
 from twilio.rest import Client
 import schedule
 import time
-
+import os 
 ### Define pledges
 print('What are your pledges for this week?')
 user_pledges = str(input())
 
-# Your Account Sid and Auth Token from twilio.com/console
-# DANGER! This is insecure. See http://twil.io/secure
-account_sid = 'AC9a17dd2a160a15c4b5ad4db719e0f4d1' # good to make these secret
-auth_token = '4d645e040cc08e6bf6997a4b0e0a2e54' # use environment variables to make secret!
+### Account SID and Auth Token (keeping them secure)
+account_sid = os.environ['TWILIO_ACCOUNT_SID']
+auth_token = os.environ['TWILIO_AUTH_TOKEN']
 client = Client(account_sid, auth_token)
 
 ### schedule module code
 # from here https://stackoverflow.com/questions/15088037/python-script-to-do-something-at-the-same-time-every-day
 def text_me():
-	message = client.messages \
-    	.create(
-         	body='Hello! You pledged the following this week: {}'.format(user_pledges),
-         	from_='+16193562670',
-         	to='+447397854011'
-     	)
+    message = client.messages \
+        .create(
+            body='Hello! You pledged the following this week: {}'.format(user_pledges),
+            from_='+16193562670',
+            to='+447397854011'
+        )
 
-schedule.every().day.at("15:48").do(text_me)
+schedule.every().day.at("16:05").do(text_me)
 
 while True:
     schedule.run_pending()
