@@ -1,4 +1,5 @@
 # Download the helper library from https://www.twilio.com/docs/python/install
+import twilio.rest
 from twilio.rest import Client
 import schedule
 import time
@@ -8,8 +9,11 @@ print('What are your pledges for this week?')
 user_pledges = str(input())
 
 ### Account SID and Auth Token (keeping them secure)
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
-auth_token = os.environ['TWILIO_AUTH_TOKEN']
+# This doesn't work. Need to go over how to make environment variables again!
+account_sid = os.getenv('TWILIO_ACCOUNT_SID') # THIS IS ALWAYS 'NONE', making it fail! :( 
+print(account_sid)
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+print(auth_token)
 client = Client(account_sid, auth_token)
 
 ### schedule module code
@@ -22,7 +26,7 @@ def text_me():
             to='+447397854011'
         )
 
-schedule.every().day.at("16:05").do(text_me)
+schedule.every().day.at("19:54").do(text_me)
 
 while True:
     schedule.run_pending()
