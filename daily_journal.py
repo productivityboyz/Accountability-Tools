@@ -14,6 +14,9 @@
 ### FEATURES FOR FUTURE VERSIONS
 # Ability to track how many days in a row the script has been used, and this being printed to the user 
 # Replace .txt functionality for .docx, and have some formatting like bold questions?
+# Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
+# ... and prompt you individually to recall each previous day. I.e. "Ok so today is Thur, what did you do on Wed?"...
+# ... "And what did you do on Tue?" etc. 
 
 ### IMPORTS
 from datetime import datetime
@@ -39,11 +42,14 @@ elif platform == 'darwin':
 ### DECLARING VARIABLES
 today = date.today()
 today_date = today.strftime("%B %d, %Y")
-morning_prompt_1 = 'What are three things you are grateful for today?'
-morning_prompt_2 = 'What are three things that would make today great?'
-morning_prompt_3 = 'Time for your daily affirmation! "I am..."'
-evening_prompt_1 = 'What are three amazing things that happened today?'
-evening_prompt_2 = 'How could you have made today even better?'
+morning_prompt_1 = '\n*What are three things you are grateful for today?*'
+morning_prompt_2 = '\n*What are three things that would make today great?*'
+morning_prompt_3 = '\n*Time for your daily affirmation! "I am..."*'
+evening_prompt_1 = '\n*What are three amazing things that happened today?*'
+evening_prompt_2 = '\n*How could you have made today even better?*'
+journal_prompt = '\n*Write a brief journal entry for the day!*'
+recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
+recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
 
 ### DEFINING FUNCTIONS
 
@@ -71,6 +77,7 @@ def morning_questions():
 	journal_file.write(morning_prompt_3 + '\n')
 	journal_file.write(morning_answer_3 + '\n \n')
 	journal_file.close()
+	print('\nSee you this evening. Have a great day!')
 
 # evening_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def evening_questions():
@@ -85,34 +92,50 @@ def evening_questions():
 	evening_answer_1 = str(input())
 	print(evening_prompt_2)
 	evening_answer_2 = str(input())
+	# Write a brief journal entry for the day
+	print(journal_prompt)
+	journal_answer = str(input())
+	# Summary of yesterday 
+	print(recall_prompt)
+	recall_answer = str(input())
+	# Summary of last week 
+	print(recall_prompt_2)
+	recall_answer_2 = str(input())
 	# Saving answers
 	journal_file.write('Evening: ' + today_date + '\n')
 	journal_file.write(evening_prompt_1 + '\n')
 	journal_file.write(evening_answer_1 + '\n \n')
 	journal_file.write(evening_prompt_2 + '\n')
 	journal_file.write(evening_answer_2 + '\n \n')
+	journal_file.write(journal_prompt + '\n')
+	journal_file.write(journal_answer + '\n \n')
+	journal_file.write(recall_prompt + '\n')
+	journal_file.write(recall_answer + '\n \n')
+	journal_file.write(recall_prompt_2 + '\n')
+	journal_file.write(recall_answer_2 + '\n \n')
 	journal_file.close()
+	print('\nSee you tomorrow!')
 
 ### MAIN CODE	
 # Greeting
-print('[Press CTRL + C to quit at any time]')
-print('Hello!')
-print('The date is {}'.format(today_date))
+print('\n[Press CTRL + C to quit at any time]')
+print('\nHello!')
+print('\nThe date is {}'.format(today_date))
 
 # Determining which prompts the user wants to answer
-print('Do you want to answer the morning prompts [M], the evening prompts [E], or both [B]?')
+print('\nDo you want to answer the morning prompts [M], the evening prompts [E], or both [B]?')
 morn_eve_both = str(input().upper()) # Ensures uncapitalized inputs are still registered
 if morn_eve_both == 'M':
-	print('Morning prompts, sure!')
+	print('\nMorning prompts, sure!')
 	morning_questions()
 elif morn_eve_both == 'E':
-	print('Evening prompts, sure!')
+	print('\nEvening prompts, sure!')
 	evening_questions()
 elif morn_eve_both == 'B':
-	print('Both, sure!')
-	print('First, the morning prompts')
+	print('\nBoth, sure!')
+	print('\nFirst, the morning prompts')
 	morning_questions()
-	print('Nice. Now for the morning prompts')
+	print('\nNice. Now for the morning prompts')
 	evening_questions()
 else: 
 	print('Sorry, I didn\'t understand that. Type M for morning prompts, E for evening, or B for both!')
