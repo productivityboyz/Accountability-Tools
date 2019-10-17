@@ -9,38 +9,53 @@
 # Potentially user-unfriendly. If only we knew Java/Kotlin/Swift!
 
 ### KNOWN ISSUES
-# The journal .txt file currently saves to the same folder as the script, which is in the GitHub repo:
-# Obviously not ideal as journals are private
-# FUTURE FIX: get the .txt file to save to the desktop (will also have to test is user computer is Mac or Windows)
 # If user doesn't input M, E or B, the script will end. I want it to loop until they enter right thing.
 
 ### FEATURES FOR FUTURE VERSIONS
 # Ability to track how many days in a row the script has been used, and this being printed to the user 
+# Replace .txt functionality for .docx, and have some formatting like bold questions?
 
+### IMPORTS
 from datetime import datetime
 from datetime import date
 import os
+import sys # for checking if user computer is Mac or PC (I'm on a Mac, I know Dan uses Windows)
+import pathlib # lets you save to specific place, and has same syntax for Windows and Mac
+from pathlib import Path
 
+print(Path.home())
+
+### OPERATING SYSTEM TEST
+platform = sys.platform
+if platform == 'linux':
+	operating_system = 'linux'
+elif platform == 'win32':
+	operating_system = 'windows'
+elif platform == 'cygwin':
+	operating_system = 'windows'
+elif platform == 'darwin':
+	operating_system = 'mac'
+
+### DECLARING VARIABLES
 today = date.today()
 today_date = today.strftime("%B %d, %Y")
-
 morning_prompt_1 = 'What are three things you are grateful for today?'
 morning_prompt_2 = 'What are three things that would make today great?'
 morning_prompt_3 = 'Time for your daily affirmation! "I am..."'
-
 evening_prompt_1 = 'What are three amazing things that happened today?'
 evening_prompt_2 = 'How could you have made today even better?'
 
 ### DEFINING FUNCTIONS
+
 # morning_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def morning_questions():
-	# Check is journal file exists
-	exists = os.path.isfile("journal.txt")
-	if exists == False:
-		journal_file = open('journal.txt', 'w') # creates file if it doesn't exist
-	elif exists == True:
-		journal_file = open('journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	# Print prompts and save user answers
+	# Check if journal file exists
+	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
+		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
+	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
+		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	print('Your answers will be saved at {}'.format(Path.home()))
+	# Prompts and inputs
 	print(morning_prompt_1)
 	morning_answer_1 = str(input())
 	print(morning_prompt_2)
@@ -60,11 +75,11 @@ def morning_questions():
 # evening_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def evening_questions():
 	# Check is journal file exists
-	exists = os.path.isfile("journal.txt")
-	if exists == False:
-		journal_file = open('journal.txt', 'w') # creates file if it doesn't exist
-	elif exists == True:
-		journal_file = open('journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
+		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
+	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
+		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	print('Your answers will be saved at {}'.format(Path.home()))
 	# Print prompts and save user answers
 	print(evening_prompt_1)
 	evening_answer_1 = str(input())
