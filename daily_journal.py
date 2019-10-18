@@ -28,7 +28,7 @@ from pathlib import Path
 
 print(Path.home())
 
-### OPERATING SYSTEM TEST
+### OPERATING SYSTEM TEST ###
 platform = sys.platform
 if platform == 'linux':
 	operating_system = 'linux'
@@ -39,7 +39,7 @@ elif platform == 'cygwin':
 elif platform == 'darwin':
 	operating_system = 'mac'
 
-### DECLARING VARIABLES
+### DECLARING VARIABLES ###
 today = date.today()
 today_date = today.strftime("%B %d, %Y")
 morning_prompt_1 = '\n*What are three things you are grateful for today?*'
@@ -50,9 +50,9 @@ evening_prompt_2 = '\n*How could you have made today even better?*'
 journal_prompt = '\n*Write a brief journal entry for the day!*'
 recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
 recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
+ten_mins_writing_prompt = '\n*Write for 10 minutes. Go!*\n*(When you\'re done, enter a single full stop on a line by itself)*\n'
 
-### DEFINING FUNCTIONS
-
+### DEFINING FUNCTIONS ###
 # morning_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def morning_questions():
 	# Check if journal file exists
@@ -116,6 +116,30 @@ def evening_questions():
 	journal_file.close()
 	print('\nSee you tomorrow!')
 
+# writing_prompt() checks existence of journal.txt and then enters multiline input into this file
+def writing_prompt():
+	# Check if Writing file exists
+	if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
+		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'w') # creates file if it doesn't exist
+	elif ((pathlib.Path.home() / 'Writing.txt').is_file()) == True:
+		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	print('Your answers will be saved at {}'.format(Path.home()))
+	# Prompts and inputs
+	print(ten_mins_writing_prompt)
+	# INPUT MULTIPLE LINES
+	buffer = []
+	while True:
+    		print("> ", end="") # this indentation seems wrong, but it wouldn't run until I made it like this!
+    		line = input()
+    		if line == ".":
+        		break
+    		buffer.append(line)
+	user_input_1 = "\n".join(buffer)
+	# Saving answers
+	writing_file.write(today_date + '\n')
+	writing_file.write(user_input_1 + '\n')
+	print('\nNice one! See you tomorrow.')
+
 ### MAIN CODE	
 # Greeting
 print('\n[Press CTRL + C to quit at any time]')
@@ -123,20 +147,23 @@ print('\nHello!')
 print('\nThe date is {}'.format(today_date))
 
 # Determining which prompts the user wants to answer
-print('\nDo you want to answer the morning prompts [M], the evening prompts [E], or both [B]?')
-morn_eve_both = str(input().upper()) # Ensures uncapitalized inputs are still registered
-if morn_eve_both == 'M':
+print('\nDo you want to answer the morning prompts [M], the evening prompts [E], both [B], or do you want to write for 10 minutes [W]?')
+user_decision = str(input().upper()) # Ensures uncapitalized inputs are still registered
+if user_decision == 'M':
 	print('\nMorning prompts, sure!')
 	morning_questions()
-elif morn_eve_both == 'E':
+elif user_decision == 'E':
 	print('\nEvening prompts, sure!')
 	evening_questions()
-elif morn_eve_both == 'B':
+elif user_decision == 'B':
 	print('\nBoth, sure!')
 	print('\nFirst, the morning prompts')
 	morning_questions()
 	print('\nNice. Now for the morning prompts')
 	evening_questions()
+elif user_decision == 'W':
+	print('\nWriting for 10 minutes, sure!')
+	writing_prompt()
 else: 
 	print('Sorry, I didn\'t understand that. Type M for morning prompts, E for evening, or B for both!')
 		# need to get the loop to repeat here
