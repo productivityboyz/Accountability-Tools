@@ -12,11 +12,13 @@
 # If user doesn't input M, E or B, the script will end. I want it to loop until they enter right thing.
 
 ### FEATURES FOR FUTURE VERSIONS
-# Ability to track how many days in a row the script has been used, and this being printed to the user 
-# Replace .txt functionality for .docx, and have some formatting like bold questions?
-# Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
+# 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
+# 2) Replace .txt functionality for .docx, and have some formatting like bold questions?
+# 3) Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
 # ... and prompt you individually to recall each previous day. I.e. "Ok so today is Thur, what did you do on Wed?"...
 # ... "And what did you do on Tue?" etc. 
+# 4) Would be great to have this as a runnable programme, rather than a Python script, so you don't have to...
+# ... open your IDE or command line to do this every day. If it could be launched from the desktop, super convenient!
 
 ### IMPORTS
 from datetime import datetime
