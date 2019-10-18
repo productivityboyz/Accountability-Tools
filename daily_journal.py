@@ -1,26 +1,26 @@
 ### MISSION STATEMENT ###
-# This is a script that the user would run daily
-# It will be modeled off the 'Five-Minute Journal'
-# The user will be given prompts to answer, such as 'Give 3 things that you are grateful for'
-# The questions and answers will then be outputted to a file
+# This is a script that the user runs twice daily (morning and evening)
+# It's modeled off the 'Five-Minute Journal'
+# First, the user says whether they want to answer morning or evening prompts
+# The user is then given prompts to answer, such as 'Give 3 things that you are grateful for'
+# The questions and answers are then outputted to a .txt file at their home directory 
+# I've (Alex) added additional functionality for me: the option to choose 'write for 10 minutes'...
+# ... and then the user can write, and a bell sound is played (a .wav file) when 10 minutes has passed!
 
-### POTENTIAL ISSUES
-# The 'Five-Minute Journal' is designed to be used both in the morning and at night:
-# Potentially user-unfriendly. If only we knew Java/Kotlin/Swift!
-
-### KNOWN ISSUES
+### KNOWN ISSUES ###
 # If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
 
-### FEATURES FOR FUTURE VERSIONS
+### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
-# 2) Replace .txt functionality for .docx, and have some formatting like bold questions?
+# 2) Replace .txt functionality for .docx, and have some formatting like bold questions? ...
+# ... Although the syntax for writing .docx looks horrible, .txt is nice and easy
 # 3) Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
 # ... and prompt you individually to recall each previous day. I.e. "Ok so today is Thur, what did you do on Wed?"...
 # ... "And what did you do on Tue?" etc. 
 # 4) Would be great to have this as a runnable programme, rather than a Python script, so you don't have to...
 # ... open your IDE or command line to do this every day. If it could be launched from the desktop, super convenient!
 
-### IMPORTS
+### IMPORTS ###
 from datetime import datetime, date, timedelta # for dates
 import time # for timer
 import os # for operating system check
@@ -178,7 +178,7 @@ def timer():
 	time.sleep(delay)
 	make_noise()
 
-### MAIN CODE	
+### MAIN CODE ###
 # Greeting
 print('\n[Press CTRL + C to quit at any time]')
 print('\nHello!')
