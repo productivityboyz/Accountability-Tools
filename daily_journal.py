@@ -65,11 +65,14 @@ ten_mins_writing_prompt = '\n*Write for 10 minutes. Go!*\n*(When you\'re done, e
 ## currently only looks for yesterday's date
 # Search .txt file for yesterday's date
 def streak_tracker():
-	with open(pathlib.Path.home() / 'Journal.txt', 'r') as fd:
-  		if yesterday_date in fd.read():
-  			print('\nYou wrote an entry yesterday, nice one!')
-  		else:
-  			print('\nThis is day 1 of your streak, keep up the good work!')
+	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
+		with open(pathlib.Path.home() / 'Journal.txt', 'r') as fd:
+   			if yesterday_date in fd.read():
+   				print('\nYou wrote an entry yesterday, nice one!')
+   			else:
+   				print('\nThis is day 1 of your streak, keep up the good work!')
+	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
+		pass # if the journal.txt file doesn't exist, pass!
 
 # morning_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def morning_questions():
@@ -135,6 +138,7 @@ def evening_questions():
 	print('\nSee you tomorrow!')
 
 # writing_prompt() checks existence of journal.txt and then enters multiline input into this file
+# want it to start a 10 minute timer and beep when the timer is done! 
 def writing_prompt():
 	# Check if Writing file exists
 	if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
