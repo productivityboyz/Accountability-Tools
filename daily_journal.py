@@ -9,7 +9,7 @@
 # Potentially user-unfriendly. If only we knew Java/Kotlin/Swift!
 
 ### KNOWN ISSUES
-# If user doesn't input M, E or B, the script will end. I want it to loop until they enter right thing.
+# If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
 
 ### FEATURES FOR FUTURE VERSIONS
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
@@ -21,8 +21,7 @@
 # ... open your IDE or command line to do this every day. If it could be launched from the desktop, super convenient!
 
 ### IMPORTS
-from datetime import datetime
-from datetime import date
+from datetime import datetime, date, timedelta
 import os
 import sys # for checking if user computer is Mac or PC (I'm on a Mac, I know Dan uses Windows)
 import pathlib # lets you save to specific place, and has same syntax for Windows and Mac
@@ -44,17 +43,34 @@ elif platform == 'darwin':
 ### DECLARING VARIABLES ###
 today = date.today()
 today_date = today.strftime("%B %d, %Y")
+yesterday = today - timedelta(days=1)
+yesterday_date = yesterday.strftime("%B %d, %Y")
+
 morning_prompt_1 = '\n*What are three things you are grateful for today?*'
 morning_prompt_2 = '\n*What are three things that would make today great?*'
 morning_prompt_3 = '\n*Time for your daily affirmation! "I am..."*'
+
 evening_prompt_1 = '\n*What are three amazing things that happened today?*'
 evening_prompt_2 = '\n*How could you have made today even better?*'
+
 journal_prompt = '\n*Write a brief journal entry for the day!*'
+
 recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
 recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
+
 ten_mins_writing_prompt = '\n*Write for 10 minutes. Go!*\n*(When you\'re done, enter a single full stop on a line by itself)*\n'
 
 ### DEFINING FUNCTIONS ###
+## streak_tracker() looks for yesterday's date in the .txt file, then the day before, etc
+## currently only looks for yesterday's date
+# Search .txt file for yesterday's date
+def streak_tracker():
+	with open(pathlib.Path.home() / 'Journal.txt', 'r') as fd:
+  		if yesterday_date in fd.read():
+  			print('\nYou wrote an entry yesterday, nice one!')
+  		else:
+  			print('\nThis is day 1 of your streak, keep up the good work!')
+
 # morning_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def morning_questions():
 	# Check if journal file exists
@@ -147,6 +163,7 @@ def writing_prompt():
 print('\n[Press CTRL + C to quit at any time]')
 print('\nHello!')
 print('\nThe date is {}'.format(today_date))
+streak_tracker()
 
 # Determining which prompts the user wants to answer
 print('\nDo you want to answer the morning prompts [M], the evening prompts [E], both [B], or do you want to write for 10 minutes [W]?')
