@@ -28,6 +28,7 @@ import sys # for checking if user computer is Mac or PC (I'm on a Mac, I know Da
 import pathlib # lets you save to specific place, and has same syntax for Windows and Mac
 from pathlib import Path
 import simpleaudio as sa # for sound effect after 10 minutes of writing
+import readline
 
 print(Path.home())
 
@@ -174,7 +175,7 @@ def make_noise():
 
 # timer() runs make_noise() after x amount of seconds (using 600 for 10 minute writing timer)
 def timer():
-	delay = 600 # 10 minutes of writing
+	delay = 10 # 10 minutes of writing
 	time.sleep(delay)
 	make_noise()
 
