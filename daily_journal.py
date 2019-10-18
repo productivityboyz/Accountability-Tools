@@ -21,11 +21,13 @@
 # ... open your IDE or command line to do this every day. If it could be launched from the desktop, super convenient!
 
 ### IMPORTS
-from datetime import datetime, date, timedelta
-import os
+from datetime import datetime, date, timedelta # for dates
+import time # for timer
+import os # for operating system check
 import sys # for checking if user computer is Mac or PC (I'm on a Mac, I know Dan uses Windows)
 import pathlib # lets you save to specific place, and has same syntax for Windows and Mac
 from pathlib import Path
+import simpleaudio as sa # for sound effect after 10 minutes of writing
 
 print(Path.home())
 
@@ -138,7 +140,7 @@ def evening_questions():
 	print('\nSee you tomorrow!')
 
 # writing_prompt() checks existence of journal.txt and then enters multiline input into this file
-# want it to start a 10 minute timer and beep when the timer is done! 
+# want it to start a 10 minute timer and beep when the timer is done! 	
 def writing_prompt():
 	# Check if Writing file exists
 	if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
@@ -148,6 +150,8 @@ def writing_prompt():
 	print('Your answers will be saved at {}'.format(Path.home()))
 	# Prompts and inputs
 	print(ten_mins_writing_prompt)
+	print('Starting the 10 minute timer now!')
+	timer()
 	# INPUT MULTIPLE LINES
 	buffer = []
 	while True:
@@ -161,6 +165,18 @@ def writing_prompt():
 	writing_file.write(today_date + '\n')
 	writing_file.write(user_input_1 + '\n')
 	print('\nNice one! See you tomorrow.')
+
+# make_noise() plays a sound effect
+def make_noise():
+	wave_obj = sa.WaveObject.from_wave_file("churchbell.wav")
+	play_obj = wave_obj.play()
+	play_obj.wait_done()
+
+# timer() runs make_noise() after x amount of seconds (using 600 for 10 minute writing timer)
+def timer():
+	delay = 600 # 10 minutes of writing
+	time.sleep(delay)
+	make_noise()
 
 ### MAIN CODE	
 # Greeting
