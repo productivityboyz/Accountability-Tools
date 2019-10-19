@@ -9,6 +9,7 @@
 
 ### KNOWN ISSUES ###
 # If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
+# BUG: I can't write for 10 minutes into my shell, it freezes after like two minutes :( Unsure what the issue is.
 
 ### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
@@ -175,7 +176,7 @@ def make_noise():
 
 # timer() runs make_noise() after x amount of seconds (using 600 for 10 minute writing timer)
 def timer():
-	delay = 10 # 10 minutes of writing
+	delay = 600 # 10 minutes of writing
 	time.sleep(delay)
 	make_noise()
 
