@@ -62,7 +62,7 @@ journal_prompt = '\n*Write a brief journal entry for the day!*'
 recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
 recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
 
-ten_mins_writing_prompt = '\n*Write for 10 minutes. Go!*\n*(When you\'re done, enter a single full stop on a line by itself)*\n'
+ten_mins_writing_prompt = "\n*Write for 10 minutes! This feature doesn't work yet, it just starts a timer. Write somewhere else!')*\n"
 
 ### DEFINING FUNCTIONS ###
 ## streak_tracker() looks for yesterday's date in the .txt file, then the day before, etc
@@ -178,28 +178,28 @@ def week_recall():
 # want it to start a 10 minute timer and beep when the timer is done! 	
 def writing_prompt():
 	# Check if Writing file exists
-	if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
-		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'w') # creates file if it doesn't exist
-	elif ((pathlib.Path.home() / 'Writing.txt').is_file()) == True:
-		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	print('Your answers will be saved at {}'.format(Path.home()))
+	#if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
+	#	writing_file = open(pathlib.Path.home() / 'Writing.txt', 'w') # creates file if it doesn't exist
+	#elif ((pathlib.Path.home() / 'Writing.txt').is_file()) == True:
+	#	writing_file = open(pathlib.Path.home() / 'Writing.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	#print('Your answers will be saved at {}'.format(Path.home()))
 	# Prompts and inputs
 	print(ten_mins_writing_prompt)
 	print('Starting the 10 minute timer now!')
 	timer()
 	# INPUT MULTIPLE LINES
-	buffer = []
-	while True:
-    		print("> ", end="") # this indentation seems wrong, but it wouldn't run until I made it like this!
-    		line = input()
-    		if line == ".":
-        		break
-    		buffer.append(line)
-	user_input_1 = "\n".join(buffer)
+	#buffer = []
+	#while True:
+    #		print("> ", end="") # this indentation seems wrong, but it wouldn't run until I made it like this!
+    #		line = input()
+    #		if line == ".":
+    #    		break
+    #		buffer.append(line)
+	#user_input_1 = "\n".join(buffer)
 	# Saving answers
-	writing_file.write(today_date + '\n')
-	writing_file.write(user_input_1 + '\n')
-	print('\nNice one! See you tomorrow.')
+	#writing_file.write(today_date + '\n')
+	#writing_file.write(user_input_1 + '\n')
+	#print('\nNice one! See you tomorrow.')
 
 # make_noise() plays a sound effect
 def make_noise():
