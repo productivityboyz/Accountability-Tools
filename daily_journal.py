@@ -120,12 +120,6 @@ def evening_questions():
 	# Write a brief journal entry for the day
 	print(journal_prompt)
 	journal_answer = str(input())
-	# Summary of yesterday 
-	print(recall_prompt)
-	recall_answer = str(input())
-	# Summary of last week 
-	print(recall_prompt_2)
-	recall_answer_2 = str(input())
 	# Saving answers
 	journal_file.write('Evening: ' + today_date + '\n')
 	journal_file.write(evening_prompt_1 + '\n')
@@ -134,12 +128,51 @@ def evening_questions():
 	journal_file.write(evening_answer_2 + '\n \n')
 	journal_file.write(journal_prompt + '\n')
 	journal_file.write(journal_answer + '\n \n')
-	journal_file.write(recall_prompt + '\n')
-	journal_file.write(recall_answer + '\n \n')
-	journal_file.write(recall_prompt_2 + '\n')
-	journal_file.write(recall_answer_2 + '\n \n')
 	journal_file.close()
 	print('\nSee you tomorrow!')
+
+def week_recall():
+	# Check if journal file exists
+	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
+		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
+	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
+		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	print('Your answers will be saved at {}'.format(Path.home()))
+	# main code
+	today = date.today()
+	today_day = (today.strftime("%A")) # gives the weekday as 'Wed' etc
+	today_val = 1 # just assigning it so it can be reassigned
+
+	days = ['Monday','Tuesday','Wednesday','Thursday',
+	'Friday','Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
+	if today_day == 'Mon':
+		today_val = 8
+	elif today_day == 'Tue':
+		today_val = 9
+	elif today_day == 'Wed':
+		today_val = 10
+	elif today_day == 'Thu':
+		today_val = 11
+	elif today_day == 'Fri':
+		today_val = 12
+	elif today_day == 'Sat':
+		today_val = 13
+	elif today_day == 'Sun':
+		today_val = 14
+
+	counter = today_val - 2
+
+	for i in range(6):
+		day_recall_prompt = ('Today is {}. What did you do on {}?'.format(today_day, days[counter]))
+		print(day_recall_prompt)
+		counter-=1
+		day_recall_input = str(input())
+		# add question to journal.txt
+		# add answer to journal.txt
+		journal_file.write(day_recall_prompt + '\n')
+		journal_file.write(day_recall_input + '\n \n')
+	journal_file.close()
 
 # writing_prompt() checks existence of journal.txt and then enters multiline input into this file
 # want it to start a 10 minute timer and beep when the timer is done! 	
@@ -196,6 +229,7 @@ if user_decision == 'M':
 elif user_decision == 'E':
 	print('\nEvening prompts, sure!')
 	evening_questions()
+	week_recall()
 elif user_decision == 'B':
 	print('\nBoth, sure!')
 	print('\nFirst, the morning prompts')
