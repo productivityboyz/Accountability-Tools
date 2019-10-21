@@ -9,16 +9,11 @@
 
 ### KNOWN ISSUES ###
 # If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
-# BUG: I can't write for 10 minutes into my shell, it freezes after like two minutes :( Unsure what the issue is.
 
 ### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
-# 2) Replace .txt functionality for .docx, and have some formatting like bold questions? ...
-# ... Although the syntax for writing .docx looks horrible, .txt is nice and easy
-# 3) Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
-# ... and prompt you individually to recall each previous day. I.e. "Ok so today is Thur, what did you do on Wed?"...
-# ... "And what did you do on Tue?" etc. 
-# 4) Would be great to have this as a runnable programme, rather than a Python script, so you don't have to...
+# 2) Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
+# 3) Would be great to have this as a runnable programme, rather than a Python script, so you don't have to...
 # ... open your IDE or command line to do this every day. If it could be launched from the desktop, super convenient!
 
 ### IMPORTS ###
@@ -31,9 +26,6 @@ from pathlib import Path
 import simpleaudio as sa # for sound effect after 10 minutes of writing
 import readline
 import threading # apparently using time.sleep() is why my 10 minute thing is dying 
-
-
-print(Path.home())
 
 ### OPERATING SYSTEM TEST ###
 platform = sys.platform
@@ -68,7 +60,7 @@ ten_mins_writing_prompt = "\n*Write for 10 minutes! This feature doesn't work ye
 
 ### DEFINING FUNCTIONS ###
 ## streak_tracker() looks for yesterday's date in the .txt file, then the day before, etc
-## currently only looks for yesterday's date
+## currently only looks for yesterday's date. FIX THIS!
 # Search .txt file for yesterday's date
 def streak_tracker():
 	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
@@ -87,7 +79,7 @@ def morning_questions():
 		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
 	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
 		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	print('Your answers will be saved at {}'.format(Path.home()))
+	print('Your answers will be saved at {}'.format(Path.home())) # this code is repeated often. Turn into function?
 	# Prompts and inputs
 	print(morning_prompt_1)
 	morning_answer_1 = str(input())
@@ -102,7 +94,7 @@ def morning_questions():
 	journal_file.write(morning_prompt_2 + '\n')
 	journal_file.write(morning_answer_2 + '\n \n')
 	journal_file.write(morning_prompt_3 + '\n')
-	journal_file.write(morning_answer_3 + '\n \n')
+	journal_file.write(morning_answer_3 + '\n \n') # could probably be tidied with loops
 	journal_file.close()
 	print('\nSee you this evening. Have a great day!')
 
@@ -144,10 +136,8 @@ def week_recall():
 	today = date.today()
 	today_day = (today.strftime("%A")) # gives the weekday as 'Wed' etc
 	today_val = 1 # just assigning it so it can be reassigned
-
 	days = ['Monday','Tuesday','Wednesday','Thursday',
 	'Friday','Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-
 	if today_day == 'Mon':
 		today_val = 8
 	elif today_day == 'Tue':
@@ -162,9 +152,7 @@ def week_recall():
 		today_val = 13
 	elif today_day == 'Sun':
 		today_val = 14
-
 	counter = today_val - 2
-
 	for i in range(6):
 		day_recall_prompt = ('Today is {}. What did you do on {}?'.format(today_day, days[counter]))
 		print(day_recall_prompt)
