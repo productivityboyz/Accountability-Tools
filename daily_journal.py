@@ -30,6 +30,8 @@ import pathlib # lets you save to specific place, and has same syntax for Window
 from pathlib import Path
 import simpleaudio as sa # for sound effect after 10 minutes of writing
 import readline
+import threading # apparently using time.sleep() is why my 10 minute thing is dying 
+
 
 print(Path.home())
 
@@ -178,28 +180,28 @@ def week_recall():
 # want it to start a 10 minute timer and beep when the timer is done! 	
 def writing_prompt():
 	# Check if Writing file exists
-	#if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
-	#	writing_file = open(pathlib.Path.home() / 'Writing.txt', 'w') # creates file if it doesn't exist
-	#elif ((pathlib.Path.home() / 'Writing.txt').is_file()) == True:
-	#	writing_file = open(pathlib.Path.home() / 'Writing.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	#print('Your answers will be saved at {}'.format(Path.home()))
+	if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
+		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'w') # creates file if it doesn't exist
+	elif ((pathlib.Path.home() / 'Writing.txt').is_file()) == True:
+		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	print('Your answers will be saved at {}'.format(Path.home()))
 	# Prompts and inputs
 	print(ten_mins_writing_prompt)
 	print('Starting the 10 minute timer now!')
-	timer()
+	time_delay()
 	# INPUT MULTIPLE LINES
-	#buffer = []
-	#while True:
-    #		print("> ", end="") # this indentation seems wrong, but it wouldn't run until I made it like this!
-    #		line = input()
-    #		if line == ".":
-    #    		break
-    #		buffer.append(line)
-	#user_input_1 = "\n".join(buffer)
+	buffer = []
+	while True:
+    		print("> ", end="") # this indentation seems wrong, but it wouldn't run until I made it like this!
+    		line = input()
+    		if line == ".":
+        		break
+    		buffer.append(line)
+	user_input_1 = "\n".join(buffer)
 	# Saving answers
-	#writing_file.write(today_date + '\n')
-	#writing_file.write(user_input_1 + '\n')
-	#print('\nNice one! See you tomorrow.')
+	writing_file.write(today_date + '\n')
+	writing_file.write(user_input_1 + '\n')
+	print('\nNice one! See you tomorrow.')
 
 # make_noise() plays a sound effect
 def make_noise():
@@ -207,11 +209,10 @@ def make_noise():
 	play_obj = wave_obj.play()
 	play_obj.wait_done()
 
-# timer() runs make_noise() after x amount of seconds (using 600 for 10 minute writing timer)
-def timer():
-	delay = 600 # 10 minutes of writing
-	time.sleep(delay)
-	make_noise()
+# time_delay() runs make_noise() after x amount of seconds (using 600 for 10 minute writing timer)
+def time_delay():
+	timer = threading.Timer(600.00, make_noise)
+	timer.start()
 
 ### MAIN CODE ###
 # Greeting
