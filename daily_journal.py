@@ -15,6 +15,11 @@
 # 2) Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
 # 3) Would be great to have this as a runnable programme, rather than a Python script, so you don't have to...
 # ... open your IDE or command line to do this every day. If it could be launched from the desktop, super convenient!
+# 4) A GUI with TKinter? Time sink though.
+
+### MINOR TWEAKS
+# Would be nice to make the terminal/ shell look better, maybe keeping inputs at the top...
+# ... or adding a slight delay to each print-out, so things don't all appear at once
 
 ### IMPORTS ###
 from datetime import datetime, date, timedelta # for dates
@@ -56,7 +61,7 @@ journal_prompt = '\n*Write a brief journal entry for the day!*'
 recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
 recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
 
-ten_mins_writing_prompt = "\n*Write for 10 minutes! This feature doesn't work yet, it just starts a timer. Write somewhere else!')*\n"
+ten_mins_writing_prompt = "\n*Write for 10 minutes!*\n*A sound effect will play when the time is up.*\n*To save, enter a full stop on a new line.*\n"
 
 ### DEFINING FUNCTIONS ###
 ## streak_tracker() looks for yesterday's date in the .txt file, then the day before, etc
