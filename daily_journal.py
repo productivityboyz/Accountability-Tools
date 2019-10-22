@@ -9,6 +9,8 @@
 
 ### KNOWN ISSUES ###
 # If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
+# BUG: week recall might only work on Mondays? It's Tuesday today, and it asked me what I did on Sunday...
+# ... whereas it's meant to ask about the day before (Mon), then the day before that (Sun) etc!
 
 ### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
@@ -29,8 +31,8 @@ import sys # for checking if user computer is Mac or PC (I'm on a Mac, I know Da
 import pathlib # lets you save to specific place, and has same syntax for Windows and Mac
 from pathlib import Path
 import simpleaudio as sa # for sound effect after 10 minutes of writing
-import readline
 import threading # apparently using time.sleep() is why my 10 minute thing is dying 
+from pyfiglet import Figlet # snazzy command-line title 
 
 ### OPERATING SYSTEM TEST ###
 platform = sys.platform
@@ -209,6 +211,10 @@ def time_delay():
 
 ### MAIN CODE ###
 # Greeting
+
+f = Figlet(font='slant')
+print(f.renderText('Welcome to Daily Journal 2.0'))
+
 print('\n[Press CTRL + C to quit at any time]')
 print('\nHello!')
 print('\nThe date is {}'.format(today_date))
