@@ -9,8 +9,6 @@
 
 ### KNOWN ISSUES ###
 # If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
-# BUG: week recall might only work on Mondays? It's Tuesday today, and it asked me what I did on Sunday...
-# ... whereas it's meant to ask about the day before (Mon), then the day before that (Sun) etc!
 
 ### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
@@ -130,34 +128,32 @@ def evening_questions():
 	journal_file.write(journal_prompt + '\n')
 	journal_file.write(journal_answer + '\n \n')
 	journal_file.close()
-	print('\nSee you tomorrow!')
-
+	
 def week_recall():
 	# Check if journal file exists
 	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
 		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
 	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
 		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	print('Your answers will be saved at {}'.format(Path.home()))
 	# main code
 	today = date.today()
 	today_day = (today.strftime("%A")) # gives the weekday as 'Wed' etc
 	today_val = 1 # just assigning it so it can be reassigned
 	days = ['Monday','Tuesday','Wednesday','Thursday',
 	'Friday','Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-	if today_day == 'Mon':
+	if today_day == 'Monday':
 		today_val = 8
-	elif today_day == 'Tue':
+	elif today_day == 'Tuesday':
 		today_val = 9
-	elif today_day == 'Wed':
+	elif today_day == 'Wednesday':
 		today_val = 10
-	elif today_day == 'Thu':
+	elif today_day == 'Thursday':
 		today_val = 11
-	elif today_day == 'Fri':
+	elif today_day == 'Friday':
 		today_val = 12
-	elif today_day == 'Sat':
+	elif today_day == 'Saturday':
 		today_val = 13
-	elif today_day == 'Sun':
+	elif today_day == 'Sunday':
 		today_val = 14
 	counter = today_val - 2
 	for i in range(6):
