@@ -16,7 +16,7 @@
 # Replace .txt functionality for .docx, and have some formatting like bold questions?
 # Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
 # ... and prompt you individually to recall each previous day. I.e. "Ok so today is Thur, what did you do on Wed?"...
-# ... "And what did you do on Tue?" etc. 
+# ... "And what did you do on Tue?" etc.
 
 ### IMPORTS
 from datetime import datetime
@@ -25,6 +25,7 @@ import os
 import sys # for checking if user computer is Mac or PC (I'm on a Mac, I know Dan uses Windows)
 import pathlib # lets you save to specific place, and has same syntax for Windows and Mac
 from pathlib import Path
+
 
 print(Path.home())
 
@@ -41,7 +42,10 @@ elif platform == 'darwin':
 
 ### DECLARING VARIABLES
 today = date.today()
-today_date = today.strftime("%B %d, %Y")
+today_time = datetime.now()
+a=today_time.hour
+
+today_date = today.strftime("%A, %d %B, %Y")
 morning_prompt_1 = '\n*What are three things you are grateful for today?*'
 morning_prompt_2 = '\n*What are three things that would make today great?*'
 morning_prompt_3 = '\n*Time for your daily affirmation! "I am..."*'
@@ -51,34 +55,54 @@ journal_prompt = '\n*Write a brief journal entry for the day!*'
 recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
 recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
 
+score_time = 0
+score_recall_1 = 0
+score_recall_2 = 0
+
+
 ### DEFINING FUNCTIONS
 
 # morning_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def morning_questions():
+	score_time = 0
 	# Check if journal file exists
 	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
 		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
+		journal_data_file =  open(pathlib.Path.home() / 'Journal_Data.txt', 'w') # Storing these answers in a more structured way will be useful if we want to test our memory recall
+
 	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
 		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+		journal_data_file = open(pathlib.Path.home() / 'Journal_Data.txt', 'a')
 	print('Your answers will be saved at {}'.format(Path.home()))
+	if a > 12:
+		score_time = score_time + 1
+
 	# Prompts and inputs
 	print(morning_prompt_1)
 	morning_answer_1 = str(input())
-	print(morning_prompt_2)
-	morning_answer_2 = str(input())
-	print(morning_prompt_3)
-	morning_answer_3 = str(input())
+	# print(morning_prompt_2)
+	# morning_answer_2 = str(input())m
+	# print(morning_prompt_3)
+	# morning_answer_3 = str(input())
 	# Saving answers
 	journal_file.write('Morning: ' + today_date + '\n')
 	journal_file.write(morning_prompt_1 + '\n')
 	journal_file.write(morning_answer_1 + '\n \n')
-	journal_file.write(morning_prompt_2 + '\n')
-	journal_file.write(morning_answer_2 + '\n \n')
-	journal_file.write(morning_prompt_3 + '\n')
-	journal_file.write(morning_answer_3 + '\n \n')
-	journal_file.close()
+	# journal_file.write(morning_prompt_2 + '\n')
+	# journal_file.write(morning_answer_2 + '\n \n')
+	# journal_file.write(morning_prompt_3 + '\n')
+	# journal_file.write(morning_answer_3 + '\n \n')
+	# journal_file.close()
+
+	# Saving answers as lines in a new .txt file
+	journal_data_file.write('Morning: ' + today_date + '\n')
+	journal_data_file.write(morning_answer_1 + '\n')
+	# journal_data_file.write(morning_answer_2 + '\n')
+	# journal_data_file.write(morning_answer_3 + '\n')
+	journal_data_file.close()
 	print('\nSee you this evening. Have a great day!')
 
+	return score_time
 # evening_questions() checks existence of journal.txt and then enters questions and answers to this file 
 def evening_questions():
 	# Check is journal file exists
@@ -140,3 +164,8 @@ elif morn_eve_both == 'B':
 else: 
 	print('Sorry, I didn\'t understand that. Type M for morning prompts, E for evening, or B for both!')
 		# need to get the loop to repeat here
+
+
+
+print(score_time)
+print("Congratulations your entry scored ",score_time," points")
