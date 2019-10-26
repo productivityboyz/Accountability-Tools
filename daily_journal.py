@@ -71,15 +71,15 @@ ten_mins_writing_prompt = "\n*Write for 10 minutes!*\n*A sound effect will play 
 ## streak_tracker() looks for yesterday's date in the .txt file, then the day before, etc
 ## currently only looks for yesterday's date. FIX THIS!
 # Search .txt file for yesterday's date
-def streak_tracker():
-	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
-		with open(pathlib.Path.home() / 'Journal.txt', 'r') as fd:
-   			if yesterday_date in fd.read():
-   				print('\nYou wrote an entry yesterday, nice one!')
-   			else:
-   				print('\nThis is day 1 of your streak, keep up the good work!')
-	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
-		pass # if the journal.txt file doesn't exist, pass!
+# def streak_tracker():
+#	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
+#		with open(pathlib.Path.home() / 'Journal.txt', 'r') as fd:
+#   			if yesterday_date in fd.read():
+#   				print('\nYou wrote an entry yesterday, nice one!')
+#   			else:
+#   				print('\nThis is day 1 of your streak, keep up the good work!')
+#	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
+#		pass # if the journal.txt file doesn't exist, pass!
 
 score_time = 0
 score_recall_1 = 0
@@ -100,8 +100,8 @@ def morning_questions():
 
 		journal_data_file = open(pathlib.Path.home() / 'Journal_Data.txt', 'a')
 	print('Your answers will be saved at {}'.format(Path.home()))
-	if a > 12:
-		score_time = score_time + 1
+	#if a > 12:
+	#	score_time = score_time + 1
     
 	# Prompts and inputs
 	print(morning_prompt_1)
@@ -240,7 +240,7 @@ print(f.renderText('Welcome to Daily Journal 2.0'))
 print('\n[Press CTRL + C to quit at any time]')
 print('\nHello!')
 print('\nThe date is {}'.format(today_date))
-streak_tracker()
+#streak_tracker()
 
 # Determining which prompts the user wants to answer
 print('\nDo you want to answer the morning prompts [M], the evening prompts [E], both [B], or do you want to write for 10 minutes [W]?')
@@ -265,7 +265,5 @@ else:
 	print('Sorry, I didn\'t understand that. Type M for morning prompts, E for evening, or B for both!')
 		# need to get the loop to repeat here
 
-
-
-print(score_time)
-print("Congratulations your entry scored ",score_time," points")
+#print(score_time)
+#print("Congratulations your entry scored ",score_time," points")
