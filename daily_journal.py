@@ -10,6 +10,9 @@
 ### KNOWN ISSUES ###
 # If user doesn't input M, E, B or W, the script will end. I want it to loop until they enter right thing.
 
+### NEXT FEATURE TO ADD ### 
+# Option for script to show you your last week of journal entries, to aid recall!
+
 ### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
 # 2) Improved "recall" section in evening section. Would be great for it to know what day it is today (i.e. Thur)...
