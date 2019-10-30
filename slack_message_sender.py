@@ -2,6 +2,7 @@ import pyautogui
 import threading
 import random
 import schedule
+import time
 
 pyautogui.PAUSE = 20 # pause of x seconds after each function call
                      # heavy delay because the raspberry pi is slow, especially loading slack
@@ -48,7 +49,7 @@ def open_slack():
     print('done')
 
 ### DELAY UNTIL x time ###
-schedule.every().day.at("21:00").do(open_slack())
+schedule.every().day.at("21:00").do(open_slack)
 
 while True:
     schedule.run_pending()
