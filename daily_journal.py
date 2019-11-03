@@ -12,6 +12,10 @@
 
 ### NEXT FEATURE TO ADD ### 
 # Option for script to show you your last week of journal entries, to aid recall!
+# Maybe should ask user for 1-sentence summary of each day, and this is what's shown.
+# Add the date to the recall. So instead of "Today is Wed. What did you do on Tue?" ...
+# ... Have it be "Today is Wed the 2nd. What did you do on Tue the 1st?" ...
+# ... As it's easier to remember an exact date than a random day 
 
 ### FEATURES FOR FUTURE VERSIONS ###
 # 1) Ability to track how many days in a row the script has been used, and this being printed to the user 
@@ -49,158 +53,93 @@ elif platform == 'darwin':
 
 ### DECLARING VARIABLES ###
 today = date.today()
-today_date = today.strftime("%B %d, %Y")
+today_date = today.strftime("%A %d %B, %Y") # [weekday] the [num]
+#today_date = today.strftime("%B %d, %Y") # November 2, 2019
+
 yesterday = today - timedelta(days=1)
 yesterday_date = yesterday.strftime("%B %d, %Y")
 
-morning_prompt_1 = '\n*What are three things you are grateful for today?*'
-morning_prompt_2 = '\n*What are three things that would make today great?*'
-morning_prompt_3 = '\n*Time for your daily affirmation! "I am..."*'
+morning_prompts = ['\n*What are three things you are grateful for today?*', 
+					'\n*What are three things that would make today great?*',
+					'\n*Time for your daily affirmation! "I am..."*']
 
-evening_prompt_1 = '\n*What are three amazing things that happened today?*'
-evening_prompt_2 = '\n*How could you have made today even better?*'
+evening_prompts = ['\n*What are three amazing things that happened today?*',
+					'\n*How could you have made today even better?*']
 
-journal_prompt = '\n*Write a brief journal entry for the day!*'
+journal_prompts = ['\n*Write a brief journal entry for the day!*']
 
-recall_prompt = '\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*'
-recall_prompt_2 = '\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*'
+recall_prompts = ['\n*Give a quick summary of what you did yesterday (recall is vital for memory consolidation!)*',
+					'\n*Give a quick summary of what you did each day for the past 7 days (if you can!)*']
 
 ten_mins_writing_prompt = "\n*Write for 10 minutes!*\n*A sound effect will play when the time is up.*\n*To save, enter a full stop on a new line.*\n"
 
-### DEFINING FUNCTIONS ###
-## streak_tracker() looks for yesterday's date in the .txt file, then the day before, etc
-## currently only looks for yesterday's date. FIX THIS!
-# Search .txt file for yesterday's date
-# def streak_tracker():
-#	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
-#		with open(pathlib.Path.home() / 'Journal.txt', 'r') as fd:
-#   			if yesterday_date in fd.read():
-#   				print('\nYou wrote an entry yesterday, nice one!')
-#   			else:
-#   				print('\nThis is day 1 of your streak, keep up the good work!')
-#	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
-#		pass # if the journal.txt file doesn't exist, pass!
-
-score_time = 0
-score_recall_1 = 0
-score_recall_2 = 0
-
+morning_answers=[]
+evening_answers=[]
 
 ### DEFINING FUNCTIONS
 # morning_questions() checks existence of journal.txt and then enters questions and answers to this file 
-def morning_questions():
-	score_time = 0
+
+def file_creator(file_name): # used in other functions, like "morning_questions", to reduce redundancy 
+	global file_variable # have to make it global so it can be used outside of functions
+	if ((pathlib.Path.home() / file_name).is_file()) == False:
+		file_variable = open(pathlib.Path.home() / file_name, 'w') # creates file if it doesn't exist
+	elif ((pathlib.Path.home() / file_name).is_file()) == True:
+		file_variable = open(pathlib.Path.home() / file_name, 'a') # reopen file in append mode so you don't overwrite previous answers
+
+def questions(morn_or_eve):
 	# Check if journal file exists
-	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
-		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
-		journal_data_file =  open(pathlib.Path.home() / 'Journal_Data.txt', 'w') # Storing these answers in a more structured way will be useful if we want to test our memory recall
-
-	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
-		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-
-		journal_data_file = open(pathlib.Path.home() / 'Journal_Data.txt', 'a')
+	file_creator('Journal.txt') # checks for file "test.txt"
 	print('Your answers will be saved at {}'.format(Path.home()))
-	#if a > 12:
-	#	score_time = score_time + 1
-    
-	# Prompts and inputs
-	print(morning_prompt_1)
-	morning_answer_1 = str(input())
-	# print(morning_prompt_2)
-	# morning_answer_2 = str(input())m
-	# print(morning_prompt_3)
-	# morning_answer_3 = str(input())
-	# Saving answers
-	journal_file.write('Morning: ' + today_date + '\n')
-	journal_file.write(morning_prompt_1 + '\n')
-	journal_file.write(morning_answer_1 + '\n \n')
-	journal_file.write(morning_prompt_2 + '\n')
-	journal_file.write(morning_answer_2 + '\n \n')
-	journal_file.write(morning_prompt_3 + '\n')
-	journal_file.write(morning_answer_3 + '\n \n') # could probably be tidied with loops
-	journal_file.close()
-
-	# Saving answers as lines in a new .txt file
-	journal_data_file.write('Morning: ' + today_date + '\n')
-	journal_data_file.write(morning_answer_1 + '\n')
-	# journal_data_file.write(morning_answer_2 + '\n')
-	# journal_data_file.write(morning_answer_3 + '\n')
-	journal_data_file.close()
-	print('\nSee you this evening. Have a great day!')
-
-	return score_time
-# evening_questions() checks existence of journal.txt and then enters questions and answers to this file 
-def evening_questions():
-	# Check is journal file exists
-	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
-		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
-	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
-		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	print('Your answers will be saved at {}'.format(Path.home()))
-	# Print prompts and save user answers
-	print(evening_prompt_1)
-	evening_answer_1 = str(input())
-	print(evening_prompt_2)
-	evening_answer_2 = str(input())
-	# Write a brief journal entry for the day
-	print(journal_prompt)
-	journal_answer = str(input())
-	# Saving answers
-	journal_file.write('Evening: ' + today_date + '\n')
-	journal_file.write(evening_prompt_1 + '\n')
-	journal_file.write(evening_answer_1 + '\n \n')
-	journal_file.write(evening_prompt_2 + '\n')
-	journal_file.write(evening_answer_2 + '\n \n')
-	journal_file.write(journal_prompt + '\n')
-	journal_file.write(journal_answer + '\n \n')
-	journal_file.close()
+	if morn_or_eve == "morning":
+		# Prompts and inputs
+		for counter, value in enumerate(morning_prompts):
+			print(value)
+			morning_answers.append(str(input()))
+		# Saving answers
+		file_variable.write('\nMorning: ' + today_date + '\n')
+		counter = 0
+		for i in (morning_prompts):
+			file_variable.write(morning_prompts[counter] + '\n')
+			file_variable.write(morning_answers[counter] + '\n')
+			counter += 1
+		file_variable.close()
+	elif morn_or_eve == 'evening':
+		# Print prompts and save user answers
+		for counter, value in enumerate(evening_prompts):
+			print(value)
+			evening_answers.append(str(input()))
+		# Saving answers
+		file_variable.write('\nEvening: ' + today_date + '\n')
+		counter = 0
+		for i in (evening_prompts):
+			file_variable.write(evening_prompts[counter] + '\n')
+			file_variable.write(evening_answers[counter] + '\n')
+			counter += 1
+		file_variable.close()
 	
 def week_recall():
-	# Check if journal file exists
-	if ((pathlib.Path.home() / 'Journal.txt').is_file()) == False:
-		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'w') # creates file if it doesn't exist
-	elif ((pathlib.Path.home() / 'Journal.txt').is_file()) == True:
-		journal_file = open(pathlib.Path.home() / 'Journal.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
-	# main code
-	today = date.today()
-	today_day = (today.strftime("%A")) # gives the weekday as 'Wed' etc
-	today_val = 1 # just assigning it so it can be reassigned
-	days = ['Monday','Tuesday','Wednesday','Thursday',
-	'Friday','Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-	if today_day == 'Monday':
-		today_val = 8
-	elif today_day == 'Tuesday':
-		today_val = 9
-	elif today_day == 'Wednesday':
-		today_val = 10
-	elif today_day == 'Thursday':
-		today_val = 11
-	elif today_day == 'Friday':
-		today_val = 12
-	elif today_day == 'Saturday':
-		today_val = 13
-	elif today_day == 'Sunday':
-		today_val = 14
-	counter = today_val - 2
+	file_creator('Journal.txt') # tests to ensure file exists. 
+	today = date.today() # type: datetime.date
+	today_string = today.strftime("%A %B %d, %Y") # [Day], [Month] [Day Number], [Year]
+	recall_counter = 1
 	for i in range(6):
-		day_recall_prompt = ('Today is {}. What did you do on {}?'.format(today_day, days[counter]))
+		d = today - timedelta(days=recall_counter) # 'd' is just an arbitrary variable name
+		d_string = d.strftime("%A %B %d, %Y") # [Day], [Month] [Day Number], [Year]
+		recall_counter += 1
+		day_recall_prompt = ('\nToday is {}. What did you do on {}?'.format(today_string,d_string))
 		print(day_recall_prompt)
-		counter-=1
 		day_recall_input = str(input())
-		# add question to journal.txt
-		# add answer to journal.txt
-		journal_file.write(day_recall_prompt + '\n')
-		journal_file.write(day_recall_input + '\n \n')
-	journal_file.close()
+		# add question + answer to journal.txt
+		file_variable.write(day_recall_prompt + '\n')
+		file_variable.write(day_recall_input + '\n \n')
+	print('\nNice one! See you tomorrow.\n')
+	file_variable.close()
 
 # writing_prompt() checks existence of journal.txt and then enters multiline input into this file
 # want it to start a 10 minute timer and beep when the timer is done! 	
 def writing_prompt():
 	# Check if Writing file exists
-	if ((pathlib.Path.home() / 'Writing.txt').is_file()) == False:
-		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'w') # creates file if it doesn't exist
-	elif ((pathlib.Path.home() / 'Writing.txt').is_file()) == True:
-		writing_file = open(pathlib.Path.home() / 'Writing.txt', 'a') # reopen file in append mode so you don't overwrite previous answers
+	file_creator('Writing.txt') # tests to ensure file exists. 
 	print('Your answers will be saved at {}'.format(Path.home()))
 	# Prompts and inputs
 	print(ten_mins_writing_prompt)
@@ -243,27 +182,17 @@ print('\nThe date is {}'.format(today_date))
 #streak_tracker()
 
 # Determining which prompts the user wants to answer
-print('\nDo you want to answer the morning prompts [M], the evening prompts [E], both [B], or do you want to write for 10 minutes [W]?')
+print('\nDo you want to answer the morning prompts [M], the evening prompts [E], or do you want to write for 10 minutes [W]?')
 user_decision = str(input().upper()) # Ensures uncapitalized inputs are still registered
 if user_decision == 'M':
 	print('\nMorning prompts, sure!')
-	morning_questions()
+	questions('morning')
 elif user_decision == 'E':
 	print('\nEvening prompts, sure!')
-	evening_questions()
+	questions('evening')
 	week_recall()
-elif user_decision == 'B':
-	print('\nBoth, sure!')
-	print('\nFirst, the morning prompts')
-	morning_questions()
-	print('\nNice. Now for the morning prompts')
-	evening_questions()
 elif user_decision == 'W':
 	print('\nWriting for 10 minutes, sure!')
 	writing_prompt()
 else: 
 	print('Sorry, I didn\'t understand that. Type M for morning prompts, E for evening, or B for both!')
-		# need to get the loop to repeat here
-
-#print(score_time)
-#print("Congratulations your entry scored ",score_time," points")
