@@ -1,4 +1,5 @@
 # Accountability-Tools
+## daily_journal.py notes:
 
 ## This repo will contain accountability tools. 
 
